@@ -1,0 +1,114 @@
+---
+title: Welcome to Middleman
+---
+
+<div class="wrapper">
+  <div class="row" data-filters>
+    <form class="filters span3">
+      <h2>Filters</h2>
+      <fieldset data-bind="event: {change: add_prop}" data-filter-name="color">
+        <legend><span>Colors <span class="selected" data-bind="text: color"></span></span></legend>
+        <ul class="unstyled">
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" value="red"> Red
+            </label>
+          </li>
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" value="blue"> Blue
+            </label>
+          </li>
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" value="green"> Green
+            </label>
+          </li>
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" value="orange"> Orange
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+      <fieldset data-bind="event: {change: add_prop}" data-filter-name="text_case">
+        <legend><span>Case <span class="selected" data-bind="text: text_case"></span></span></legend>
+        <ul class="unstyled">
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" value="none"> None
+            </label>
+          </li>
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" value="uppercase"> UPPERCASE
+            </label>
+          </li>
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" value="lowercase"> lowercase
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+      <fieldset data-bind="event: {change: add_prop}" data-filter-name="importance" data-filter-type="and">
+        <legend><span>Importance <span class="selected" data-bind="text: importance"></span></span></legend>
+        <ul class="unstyled">
+          <li>
+            <label class="radio">
+              <input type="radio" value="" name="filters[important]" checked> All
+            </label>
+          </li>
+          <li>
+            <label class="radio">
+              <input type="radio" value="regular" name="filters[important]"> Regular
+            </label>
+          </li>
+          <li>
+            <label class="radio">
+              <input type="radio" value="important"  name="filters[important]"> Important!
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+    <div class="span9 items">
+      <% ["Lorem","ipsum","dolor","sit","amet,","consectetur","adipisicing","elit,","sed","do","eiusmod","tempor","incididunt","ut","labore","et","dolore","magna","aliqua.","Ut","enim","ad","minim","veniam,","quis","nostrud","exercitation","ullamco","laboris","nisi","ut","aliquip","ex","ea","commodo","consequat.","Duis","aute","irure","dolor","in","reprehenderit","in","voluptate","velit","esse","cillum","dolore","eu","fugiat","nulla","pariatur.","Excepteur","sint","occaecat","cupidatat","non","proident,","sunt","in","culpa","qui","officia","deserunt","mollit","anim","id","est","laborum."].each do |lorem| %>
+      <% 
+        important = rand(2) == 0 
+        color, color_class = case ["red","blue","green","orange"].sample
+          when "red"
+            ["red", "btn-danger"]
+          when "blue"
+            ["blue", "btn-primary"]
+          when "green"
+            ["green", "btn-success"]
+          when "orange"
+            ["orange", "btn-warning"]
+          end
+        text_case =  ["none", "lowercase", "uppercase"].sample
+        lorem = case text_case
+          when "lowercase"
+            lorem.downcase
+          when "uppercase"
+            lorem.upcase
+          else
+            lorem.capitalize
+          end
+      %>
+      <button type="button" class="btn <%=color_class%>" 
+              data-color="<%=color%>"
+              data-text_case="<%=text_case%>"
+              data-importance="<%= important ? "important" : "regular"%>"
+              data-bind="visible: filter_by($element, 'color', 'text_case', 'importance')"><%=lorem%><%= important ? "!" : ""%></button>
+      <% end %>
+    </div>
+  </div>
+</div>  
+
+<% content_for :js do %>
+  <script>
+    var filters = $("[data-filters]");
+    ko.applyBindings(new Filters(filters), filters[0]);
+  </script>
+<% end %>
