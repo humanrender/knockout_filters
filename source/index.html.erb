@@ -99,9 +99,10 @@ title: Welcome to Middleman
       <button type="button" class="btn <%=color_class%>" 
               data-color="<%=color%>"
               data-text_case="<%=text_case%>"
+              data-bind="visible: filter_by($element, 'color', 'text_case', 'importance')"
               data-importance="<%= important ? "important" : "regular"%>"><%=lorem%></button>
               
-              <!--data-bind="visible: filter_by($element, 'color', 'text_case', 'importance')"><%=lorem%><%= important ? "!" : ""%></button> -->
+              <!--"><%=lorem%><%= important ? "!" : ""%></button> -->
       <% end %>
     </div>
   </div>
